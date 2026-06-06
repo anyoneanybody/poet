@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>연락 — 김고니</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #251040;
+      color: rgba(235, 200, 215, 0.88);
+      font-family: 'Nanum Myeongjo', serif;
+      min-height: 100vh;
+    }
+
+    .stars { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+    .star {
+      position: absolute;
+      border-radius: 50%;
+      background: white;
+      animation: twinkle var(--dur, 10s) ease-in-out infinite var(--delay, 0s);
+    }
+    @keyframes twinkle {
+      0%   { opacity: var(--min-op, 0.05); }
+      30%  { opacity: var(--mid-op, 0.2); }
+      55%  { opacity: var(--min-op, 0.05); }
+      80%  { opacity: var(--max-op, 0.3); }
+      100% { opacity: var(--min-op, 0.05); }
+    }
+
+    header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 24px 48px;
+      background: rgba(37,16,64,1);
+      border-bottom: 1px solid rgba(210, 160, 185, 0.1);
+    }
+    .header-home {
+      font-size: 1rem;
+      font-weight: 800;
+      letter-spacing: 0.45em;
+      color: rgba(255, 242, 225, 0.95);
+      text-decoration: none;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.6);
+      transition: color 0.3s;
+      writing-mode: horizontal-tb;
+      white-space: nowrap;
+    }
+    .header-home:hover { color: rgba(255, 240, 225, 1); }
+    .header-nav {
+      display: flex;
+      gap: 28px;
+      align-items: center;
+    }
+    .header-nav a {
+      color: rgba(210, 180, 200, 0.6);
+      text-decoration: none;
+      font-size: 0.82rem;
+      letter-spacing: 0.2em;
+      font-family: 'Nanum Myeongjo', serif;
+      transition: color 0.3s;
+      writing-mode: horizontal-tb;
+      white-space: nowrap;
+    }
+    .header-nav a:hover,
+    .header-nav a.active { color: rgba(255, 240, 225, 0.97); }
+
+    @media (max-width: 600px) {
+      header { padding: 16px 20px; }
+      .header-nav { gap: 14px; }
+      .header-nav a { font-size: 0.72rem; }
+      .header-home { font-size: 0.85rem; letter-spacing: 0.3em; }
+    }
+
+    .fog-container {
+      position: fixed; inset: 0; pointer-events: none; z-index: 1;
+    }
+    .fog-layer {
+      position: absolute; width: 200%; height: 200%; top: -50%; left: -50%;
+      background: radial-gradient(ellipse at center, rgba(200,150,180,0.07) 0%, transparent 60%);
+      animation: fogDrift 20s ease-in-out infinite alternate;
+    }
+    .fog-layer:nth-child(2) {
+      background: radial-gradient(ellipse at 30% 70%, rgba(180,130,170,0.06) 0%, transparent 50%);
+      animation: fogDrift2 28s ease-in-out infinite alternate;
+    }
+    .fog-layer:nth-child(3) {
+      background: radial-gradient(ellipse at 70% 30%, rgba(220,170,190,0.05) 0%, transparent 55%);
+      animation: fogDrift3 35s ease-in-out infinite alternate;
+    }
+    @keyframes fogDrift  { 0% { transform: translate(0,0) scale(1); }     100% { transform: translate(3%,4%) scale(1.05); } }
+    @keyframes fogDrift2 { 0% { transform: translate(0,0) rotate(0deg); } 100% { transform: translate(-4%,2%) rotate(3deg); } }
+    @keyframes fogDrift3 { 0% { transform: translate(0,0) scale(1.05); }  100% { transform: translate(5%,-3%) scale(1); } }
+
+    #fogCanvas { position: fixed; inset: 0; z-index: 2; pointer-events: none; }
+
+    main {
+      position: fixed; inset: 0; z-index: 5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 18px;
+    }
+
+    .contact-name {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 800;
+      letter-spacing: 0.5em;
+      color: rgba(255, 242, 225, 0.95);
+      text-shadow: 0 2px 12px rgba(0,0,0,0.5), 0 0 40px rgba(210,140,170,0.25);
+    }
+
+    .contact-email {
+      font-size: clamp(0.85rem, 1.8vw, 1.05rem);
+      letter-spacing: 0.15em;
+      color: rgba(220, 185, 205, 0.7);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    .contact-email:hover { color: rgba(255, 240, 225, 0.97); }
+  </style>
+</head>
+<body>
+
+  <div class="stars" id="stars"></div>
+  <div class="fog-container">
+    <div class="fog-layer"></div>
+    <div class="fog-layer"></div>
+    <div class="fog-layer"></div>
+  </div>
+  <canvas id="fogCanvas"></canvas>
+
+  <header>
+    <a class="header-home" href="index.html">김고니</a>
+    <nav class="header-nav">
+      <a href="index.html">메인</a>
+      <a href="books.html">시집</a>
+      <a href="about.html">작가소개</a>
+      <a href="contact.html" class="active">연락</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="contact-name">김 고 니</div>
+    <a class="contact-email" href="mailto:이메일주소@example.com">이메일주소@example.com</a>
+  </main>
+
+  <script>
+    const starsEl = document.getElementById('stars');
+    for (let i = 0; i < 80; i++) {
+      const s = document.createElement('div');
+      s.className = 'star';
+      const size = Math.random() * 1.8 + 0.4;
+      const minOp = 0.02 + Math.random() * 0.06;
+      const maxOp = minOp + 0.15 + Math.random() * 0.3;
+      s.style.cssText = `width:${size}px;height:${size}px;top:${Math.random()*100}%;left:${Math.random()*100}%;--dur:${9+Math.random()*16}s;--delay:${-Math.random()*20}s;--min-op:${minOp.toFixed(3)};--mid-op:${(minOp+(maxOp-minOp)*0.5).toFixed(3)};--max-op:${maxOp.toFixed(3)};`;
+      starsEl.appendChild(s);
+    }
+
+    const fogCanvas = document.getElementById('fogCanvas');
+    const fogCtx = fogCanvas.getContext('2d');
+    function resizeFog() { fogCanvas.width = window.innerWidth; fogCanvas.height = window.innerHeight; }
+    resizeFog(); window.addEventListener('resize', resizeFog);
+
+    const fogParticles = Array.from({ length: 50 }, () => ({
+      x: Math.random() * window.innerWidth, y: Math.random() * window.innerHeight,
+      r: 80 + Math.random() * 180, vx: (Math.random()-0.5)*0.18, vy: (Math.random()-0.5)*0.12,
+      a: 0.01 + Math.random() * 0.03, phase: Math.random() * Math.PI * 2,
+    }));
+
+    function drawFog(t) {
+      fogCtx.clearRect(0, 0, fogCanvas.width, fogCanvas.height);
+      for (const p of fogParticles) {
+        const pulse = Math.sin(t * 0.0006 + p.phase) * 0.012;
+        const grad = fogCtx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r);
+        grad.addColorStop(0, `rgba(200,155,175,${p.a+pulse})`);
+        grad.addColorStop(0.5, `rgba(175,135,160,${(p.a+pulse)*0.4})`);
+        grad.addColorStop(1, 'rgba(0,0,0,0)');
+        fogCtx.fillStyle = grad; fogCtx.beginPath(); fogCtx.arc(p.x, p.y, p.r, 0, Math.PI*2); fogCtx.fill();
+        p.x += p.vx; p.y += p.vy;
+        if (p.x < -p.r) p.x = fogCanvas.width + p.r;
+        if (p.x > fogCanvas.width + p.r) p.x = -p.r;
+        if (p.y < -p.r) p.y = fogCanvas.height + p.r;
+        if (p.y > fogCanvas.height + p.r) p.y = -p.r;
+      }
+    }
+
+    const shootingCanvas = document.createElement('canvas');
+    shootingCanvas.style.cssText = 'position:fixed;inset:0;z-index:1;pointer-events:none;';
+    document.body.appendChild(shootingCanvas);
+    const sc = shootingCanvas.getContext('2d');
+    function resizeShooting() { shootingCanvas.width = window.innerWidth; shootingCanvas.height = window.innerHeight; }
+    resizeShooting(); window.addEventListener('resize', resizeShooting);
+
+    const shootingStars = [];
+    function spawnShootingStar() {
+      const angle = (30 + Math.random() * 25) * Math.PI / 180;
+      shootingStars.push({ x: Math.random()*window.innerWidth*0.9, y: Math.random()*window.innerHeight*0.35,
+        vx: Math.cos(angle)*(3.5+Math.random()*2), vy: Math.sin(angle)*(3.5+Math.random()*2),
+        length: 90+Math.random()*120, life: 0, maxLife: 55+Math.random()*30 });
+    }
+    spawnShootingStar(); setInterval(spawnShootingStar, 5000);
+
+    function drawShootingStars() {
+      sc.clearRect(0, 0, shootingCanvas.width, shootingCanvas.height);
+      for (let i = shootingStars.length - 1; i >= 0; i--) {
+        const s = shootingStars[i];
+        s.life++; s.x += s.vx; s.y += s.vy;
+        const progress = s.life / s.maxLife;
+        const alpha = progress < 0.2 ? progress/0.2 : progress > 0.7 ? (1-progress)/0.3 : 1;
+        const len = s.length / Math.hypot(s.vx, s.vy);
+        const tailX = s.x - s.vx*len, tailY = s.y - s.vy*len;
+        const grad = sc.createLinearGradient(tailX, tailY, s.x, s.y);
+        grad.addColorStop(0, 'rgba(255,210,190,0)');
+        grad.addColorStop(0.6, `rgba(240,200,180,${(alpha*0.35).toFixed(3)})`);
+        grad.addColorStop(1, `rgba(255,235,215,${(alpha*0.75).toFixed(3)})`);
+        sc.beginPath(); sc.moveTo(tailX, tailY); sc.lineTo(s.x, s.y);
+        sc.strokeStyle = grad; sc.lineWidth = 0.8 + Math.random()*0.4; sc.stroke();
+        sc.beginPath(); sc.arc(s.x, s.y, 1.2, 0, Math.PI*2);
+        sc.fillStyle = `rgba(255,235,215,${(alpha*0.6).toFixed(3)})`; sc.fill();
+        if (s.life >= s.maxLife) shootingStars.splice(i, 1);
+      }
+    }
+
+    function bgAnimate(t) {
+      requestAnimationFrame(bgAnimate);
+      drawFog(t);
+      drawShootingStars();
+    }
+    requestAnimationFrame(bgAnimate);
+  </script>
+</body>
+</html>

@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>김고니 시인</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #251040;
+      overflow: hidden;
+      width: 100vw;
+      height: 100vh;
+      font-family: 'Nanum Myeongjo', 'Malgun Gothic', serif;
+    }
+
+    /* 안개 레이어 */
+    .fog-container {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .fog-layer {
+      position: absolute;
+      width: 200%;
+      height: 200%;
+      top: -50%;
+      left: -50%;
+      background: radial-gradient(ellipse at center,
+        rgba(200, 150, 180, 0.07) 0%,
+        transparent 60%);
+      animation: fogDrift 20s ease-in-out infinite alternate;
+    }
+
+    .fog-layer:nth-child(2) {
+      background: radial-gradient(ellipse at 30% 70%,
+        rgba(180, 130, 170, 0.06) 0%,
+        transparent 50%);
+      animation: fogDrift2 28s ease-in-out infinite alternate;
+    }
+
+    .fog-layer:nth-child(3) {
+      background: radial-gradient(ellipse at 70% 30%,
+        rgba(220, 170, 190, 0.05) 0%,
+        transparent 55%);
+      animation: fogDrift3 35s ease-in-out infinite alternate;
+    }
+
+    @keyframes fogDrift {
+      0%   { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(3%, 4%) scale(1.05); }
+    }
+    @keyframes fogDrift2 {
+      0%   { transform: translate(0, 0) rotate(0deg); }
+      100% { transform: translate(-4%, 2%) rotate(3deg); }
+    }
+    @keyframes fogDrift3 {
+      0%   { transform: translate(0, 0) scale(1.05); }
+      100% { transform: translate(5%, -3%) scale(1); }
+    }
+
+    /* 별빛 배경 */
+    .stars {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+    }
+
+    .star {
+      position: absolute;
+      border-radius: 50%;
+      background: white;
+      animation: twinkle var(--dur, 4s) ease-in-out infinite var(--delay, 0s);
+    }
+
+    @keyframes twinkle {
+      0%   { opacity: var(--min-op, 0.05); }
+      30%  { opacity: var(--mid-op, 0.3); }
+      55%  { opacity: var(--min-op, 0.05); }
+      80%  { opacity: var(--max-op, 0.5); }
+      100% { opacity: var(--min-op, 0.05); }
+    }
+
+    /* 캔버스: 안개 파티클 */
+    #fogCanvas {
+      position: fixed;
+      inset: 0;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    /* 부유하는 단어들 */
+    .words-container {
+      position: fixed;
+      inset: 0;
+      z-index: 4;
+    }
+
+    .word {
+      position: absolute;
+      color: rgba(235, 200, 215, 0.78);
+      font-family: 'Nanum Myeongjo', serif;
+      cursor: default;
+      user-select: none;
+      transition: color 0.4s, text-shadow 0.4s;
+      will-change: transform;
+      white-space: nowrap;
+    }
+
+    .word:hover {
+      color: rgba(255, 255, 255, 1);
+      text-shadow:
+        0 0 20px rgba(255, 200, 160, 0.9),
+        0 0 40px rgba(230, 160, 120, 0.5);
+    }
+
+    /* 헤더 */
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 48px 0 0;
+      pointer-events: none;
+    }
+
+    .poet-name {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 800;
+      color: rgba(255, 242, 225, 0.97);
+      letter-spacing: 0.4em;
+      text-shadow:
+        0 2px 8px rgba(0, 0, 0, 0.6),
+        0 0 60px rgba(210, 140, 170, 0.35);
+      animation: titleBreath 6s ease-in-out infinite;
+    }
+
+    .poet-sub {
+      margin-top: 10px;
+      font-size: clamp(0.75rem, 1.5vw, 0.95rem);
+      color: rgba(220, 185, 205, 0.78);
+      letter-spacing: 0.6em;
+      font-weight: 400;
+      animation: titleBreath 6s ease-in-out infinite 1s;
+    }
+
+    @keyframes titleBreath {
+      0%, 100% { opacity: 0.85; }
+      50%       { opacity: 1; }
+    }
+
+    /* 하단 nav */
+    .nav {
+      position: fixed;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
+      display: flex;
+      flex-direction: row;
+      align-items: flex-end;
+      gap: 36px;
+    }
+
+    .nav a {
+      color: rgba(210, 180, 200, 0.68);
+      text-decoration: none;
+      font-size: clamp(1.1rem, 2vw, 1.6rem);
+      letter-spacing: 0.2em;
+      transition: color 0.3s, text-shadow 0.3s;
+      font-family: 'Nanum Myeongjo', serif;
+      text-shadow: 0 1px 6px rgba(0, 0, 0, 0.5);
+      writing-mode: vertical-rl;
+      text-orientation: mixed;
+    }
+
+    .nav a:hover {
+      color: rgba(255, 240, 225, 0.97);
+      text-shadow: 0 0 12px rgba(230, 160, 120, 0.6), 0 1px 6px rgba(0,0,0,0.5);
+    }
+
+    /* 책 프레임 이미지 */
+    #bookFrame {
+      position: fixed;
+      top: 130px;
+      bottom: 120px;
+      left: 50%;
+      transform: translateX(-50%);
+      /* 원본 비율 1120:1400 = 0.8 → 높이 기준으로 너비 자동 */
+      height: calc(100vh - 130px - 120px);
+      width: auto;
+      max-width: min(85vw, 420px);
+      object-fit: contain;
+      object-position: center;
+      z-index: 3;
+      pointer-events: none;
+      opacity: 0.55;
+      animation: bookBreath 7s ease-in-out infinite;
+      /* 색상 보정: 흰 배경 제거하고 보라 계열로 블렌딩 */
+      mix-blend-mode: screen;
+      filter: invert(1) sepia(1) saturate(2) hue-rotate(260deg) brightness(0.7);
+    }
+
+    @keyframes bookBreath {
+      0%, 100% { opacity: 0.45; }
+      50%       { opacity: 0.7; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 별빛 -->
+  <div class="stars" id="stars"></div>
+
+  <!-- 안개 레이어 -->
+  <div class="fog-container">
+    <div class="fog-layer"></div>
+    <div class="fog-layer"></div>
+    <div class="fog-layer"></div>
+  </div>
+
+  <!-- 안개 파티클 캔버스 -->
+  <canvas id="fogCanvas"></canvas>
+
+  <!-- 부유하는 단어들 -->
+  <div class="words-container" id="wordsContainer"></div>
+
+  <!-- 헤더 -->
+  <header class="header">
+    <div class="poet-name">김 고 니</div>
+    <div class="poet-sub">시 인 · P O E T</div>
+  </header>
+
+  <!-- 책 프레임 이미지 -->
+  <img id="bookFrame" src="book_frame.svg" alt="">
+
+  <!-- 하단 네비 -->
+  <nav class="nav">
+    <a href="books.html">시집</a>
+    <a href="about.html">작가 소개</a>
+    <a href="contact.html">연락</a>
+  </nav>
+
+  <script>
+    // ── 별 생성 ──────────────────────────────────────────
+    const starsEl = document.getElementById('stars');
+    for (let i = 0; i < 120; i++) {
+      const s = document.createElement('div');
+      s.className = 'star';
+      const size = Math.random() * 2 + 0.5;
+      const minOp = 0.02 + Math.random() * 0.08;
+      const maxOp = minOp + 0.2 + Math.random() * 0.45;
+      const midOp = minOp + (maxOp - minOp) * (0.3 + Math.random() * 0.4);
+      s.style.cssText = `
+        width:${size}px; height:${size}px;
+        top:${Math.random()*100}%; left:${Math.random()*100}%;
+        --dur:${8 + Math.random()*18}s;
+        --delay:${-Math.random()*20}s;
+        --min-op:${minOp.toFixed(3)};
+        --mid-op:${midOp.toFixed(3)};
+        --max-op:${maxOp.toFixed(3)};
+      `;
+      starsEl.appendChild(s);
+    }
+
+    // ── 안개 파티클 캔버스 ────────────────────────────────
+    const canvas = document.getElementById('fogCanvas');
+    const ctx = canvas.getContext('2d');
+
+    function resize() {
+      canvas.width  = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    const NUM_FOG = 60;
+    const fogParticles = Array.from({ length: NUM_FOG }, () => ({
+      x:    Math.random() * window.innerWidth,
+      y:    Math.random() * window.innerHeight,
+      r:    80 + Math.random() * 180,
+      vx:   (Math.random() - 0.5) * 0.18,
+      vy:   (Math.random() - 0.5) * 0.12,
+      a:    0.01 + Math.random() * 0.035,
+      phase: Math.random() * Math.PI * 2,
+    }));
+
+    function drawFog(t) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (const p of fogParticles) {
+        const pulse = Math.sin(t * 0.0006 + p.phase) * 0.012;
+        const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r);
+        grad.addColorStop(0,   `rgba(200,155,175,${p.a + pulse})`);
+        grad.addColorStop(0.5, `rgba(175,135,160,${(p.a + pulse) * 0.4})`);
+        grad.addColorStop(1,   'rgba(0,0,0,0)');
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fill();
+
+        p.x += p.vx;
+        p.y += p.vy;
+        if (p.x < -p.r)  p.x = canvas.width  + p.r;
+        if (p.x > canvas.width  + p.r) p.x = -p.r;
+        if (p.y < -p.r)  p.y = canvas.height + p.r;
+        if (p.y > canvas.height + p.r) p.y = -p.r;
+      }
+    }
+
+    // ── 부유하는 단어 ─────────────────────────────────────
+    const KEYWORDS = [
+      { text: '발자국', size: 2.2 },
+      { text: '어머니', size: 2.0 },
+      { text: '사랑',   size: 2.6 },
+      { text: '그리움', size: 2.4 },
+      { text: '하늘',   size: 1.8 },
+      { text: '바람',   size: 2.0 },
+      { text: '봄',     size: 1.6 },
+      { text: '비',     size: 1.5 },
+      { text: '달',     size: 2.2 },
+      { text: '빛',     size: 2.0 },
+      { text: '눈물',   size: 1.7 },
+      { text: '아픔',   size: 1.6 },
+      { text: '아침',   size: 1.9 },
+      { text: '가족',   size: 1.5 },
+      { text: '꽃',     size: 2.1 },
+      { text: '다리',   size: 1.6 },
+      { text: '사람',   size: 1.7 },
+      { text: '용서',   size: 1.8 },
+      { text: '고독',   size: 1.9 },
+      { text: '길',     size: 2.3 },
+      { text: '슬픔',   size: 1.8 },
+    ];
+
+    const container = document.getElementById('wordsContainer');
+    const W = () => window.innerWidth;
+    const H = () => window.innerHeight;
+
+    // 책 프레임 범위 계산 (img 실제 렌더 위치 기반)
+    function getBookBounds() {
+      const book = document.getElementById('bookFrame');
+      const nav  = document.querySelector('.nav');
+      const r = book ? book.getBoundingClientRect() : null;
+
+      // 상하 경계: 헤더 실제 하단 / nav 실제 상단 기준 (최우선)
+      const header = document.querySelector('.header');
+      const yMin = header ? header.getBoundingClientRect().bottom + 16 : 160;
+      const yMax = nav
+        ? nav.getBoundingClientRect().top - 24
+        : window.innerHeight - 180;
+
+      // 좌우 경계: 책 기준 ± 160px
+      const expand = 160;
+      const xMin = r ? r.left - expand : 80;
+      const xMax = r ? r.right + expand : window.innerWidth - 80;
+
+      return { xMin, xMax, yMin, yMax, w: xMax - xMin, h: yMax - yMin };
+    }
+
+    // 단어 객체 생성
+    const wordObjects = KEYWORDS.map((kw, i) => {
+      const el = document.createElement('div');
+      el.className = 'word';
+      el.textContent = kw.text;
+
+      const fs = (0.8 + (kw.size - 1.5) * 0.41).toFixed(2);
+      el.style.fontSize = `${fs}rem`;
+
+      // 초기 위치 — 책 정면 커버 안에 배치
+      const b = getBookBounds();
+      const x = b.xMin + Math.random() * b.w;
+      const y = b.yMin + Math.random() * b.h;
+
+      container.appendChild(el);
+
+      return {
+        el,
+        baseX: x, baseY: y,
+        orbitAmpX: 30 + Math.random() * 60,
+        orbitAmpY: 20 + Math.random() * 50,
+        orbitSpeedX: 0.0003 + Math.random() * 0.0004,
+        orbitSpeedY: 0.0002 + Math.random() * 0.0003,
+        phaseX: Math.random() * Math.PI * 2,
+        phaseY: Math.random() * Math.PI * 2,
+        alphaBase: 0.45 + Math.random() * 0.35,
+        alphaPulse: 0.15 + Math.random() * 0.2,
+        alphaSpeed: 0.0004 + Math.random() * 0.0004,
+        alphaPhase: Math.random() * Math.PI * 2,
+        driftVx: (Math.random() - 0.5) * 0.007,
+        driftVy: (Math.random() - 0.5) * 0.005,
+      };
+    });
+
+    // ── 메인 애니메이션 루프 ──────────────────────────────
+    function animate(t) {
+      requestAnimationFrame(animate);
+      drawFog(t);
+
+      const b = getBookBounds();
+
+      for (const obj of wordObjects) {
+        const ox = Math.sin(t * obj.orbitSpeedX + obj.phaseX) * obj.orbitAmpX;
+        const oy = Math.cos(t * obj.orbitSpeedY + obj.phaseY) * obj.orbitAmpY;
+
+        obj.baseX += obj.driftVx;
+        obj.baseY += obj.driftVy;
+
+        // 책 프레임 경계 반사
+        if (obj.baseX < b.xMin || obj.baseX > b.xMax) obj.driftVx *= -1;
+        obj.baseX = Math.max(b.xMin, Math.min(b.xMax, obj.baseX));
+
+        if (obj.baseY < b.yMin || obj.baseY > b.yMax) obj.driftVy *= -1;
+        obj.baseY = Math.max(b.yMin, Math.min(b.yMax, obj.baseY));
+
+        const cx = Math.max(b.xMin, Math.min(b.xMax, obj.baseX + ox));
+        const cy = Math.max(b.yMin, Math.min(b.yMax, obj.baseY + oy));
+
+        const alpha = obj.alphaBase + Math.sin(t * obj.alphaSpeed + obj.alphaPhase) * obj.alphaPulse;
+
+        obj.el.style.transform = `translate(${cx}px, ${cy}px) translate(-50%, -50%)`;
+        obj.el.style.opacity   = Math.max(0.08, Math.min(1, alpha));
+        const blurAmt = Math.max(0, 1.5 - alpha * 2.5);
+        obj.el.style.filter = `blur(${blurAmt.toFixed(2)}px)`;
+      }
+    }
+
+    requestAnimationFrame(animate);
+
+    // ── 별똥별 ───────────────────────────────────────────
+    const shootingCanvas = document.createElement('canvas');
+    shootingCanvas.style.cssText = 'position:fixed;inset:0;z-index:1;pointer-events:none;';
+    document.body.appendChild(shootingCanvas);
+    const sc = shootingCanvas.getContext('2d');
+
+    function resizeShooting() {
+      shootingCanvas.width  = window.innerWidth;
+      shootingCanvas.height = window.innerHeight;
+    }
+    resizeShooting();
+    window.addEventListener('resize', resizeShooting);
+
+    const shootingStars = [];
+
+    function spawnShootingStar() {
+      const w = window.innerWidth, h = window.innerHeight;
+      // 화면 상단 절반 어딘가에서 시작, 대각선 방향
+      const angle = (30 + Math.random() * 25) * Math.PI / 180; // 30~55도 아래로
+      const startX = Math.random() * w * 0.9;
+      const startY = Math.random() * h * 0.35;
+      const length = 90 + Math.random() * 120;
+      shootingStars.push({
+        x: startX, y: startY,
+        vx: Math.cos(angle) * (3.5 + Math.random() * 2),
+        vy: Math.sin(angle) * (3.5 + Math.random() * 2),
+        length,
+        life: 0,       // 0 → 1
+        maxLife: 55 + Math.random() * 30, // 프레임 수
+        alpha: 0,
+      });
+    }
+
+    // 5초 고정 간격
+    spawnShootingStar();
+    setInterval(spawnShootingStar, 5000);
+
+    function drawShootingStars() {
+      sc.clearRect(0, 0, shootingCanvas.width, shootingCanvas.height);
+      for (let i = shootingStars.length - 1; i >= 0; i--) {
+        const s = shootingStars[i];
+        s.life++;
+        s.x += s.vx;
+        s.y += s.vy;
+
+        const progress = s.life / s.maxLife;
+        // fade in → hold → fade out
+        const alpha = progress < 0.2
+          ? progress / 0.2
+          : progress > 0.7
+            ? (1 - progress) / 0.3
+            : 1;
+
+        const tailX = s.x - s.vx * (s.length / Math.hypot(s.vx, s.vy));
+        const tailY = s.y - s.vy * (s.length / Math.hypot(s.vx, s.vy));
+
+        const grad = sc.createLinearGradient(tailX, tailY, s.x, s.y);
+        grad.addColorStop(0, `rgba(255,210,190,0)`);
+        grad.addColorStop(0.6, `rgba(240,200,180,${(alpha * 0.35).toFixed(3)})`);
+        grad.addColorStop(1, `rgba(255,235,215,${(alpha * 0.75).toFixed(3)})`);
+
+        sc.beginPath();
+        sc.moveTo(tailX, tailY);
+        sc.lineTo(s.x, s.y);
+        sc.strokeStyle = grad;
+        sc.lineWidth = 0.8 + Math.random() * 0.4;
+        sc.stroke();
+
+        // 머리 끝 작은 글로우
+        sc.beginPath();
+        sc.arc(s.x, s.y, 1.2, 0, Math.PI * 2);
+        sc.fillStyle = `rgba(255,235,215,${(alpha * 0.6).toFixed(3)})`;
+        sc.fill();
+
+        if (s.life >= s.maxLife) shootingStars.splice(i, 1);
+      }
+    }
+
+    // 기존 animate 루프에 주입
+    const _origAnimate = animate;
+    function animateWithShooting(t) {
+      drawShootingStars();
+      requestAnimationFrame(animateWithShooting);
+    }
+    requestAnimationFrame(animateWithShooting);
+  </script>
+</body>
+</html>
