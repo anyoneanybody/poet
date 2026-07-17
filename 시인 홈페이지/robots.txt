@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /2차 수정 자료/
+
+Sitemap: https://goni.ink/sitemap.xml

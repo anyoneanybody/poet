@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>강의 — 김고니</title>
+  <meta name="description" content="김고니 시인의 강의. 평창군립도서관 '행복한 책읽기', 시창작, 독서 논술, 동시 쓰기 등 책과 글로 만나는 수업들.">
+  <meta name="author" content="김고니">
+  <link rel="canonical" href="https://goni.ink/lectures.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="김고니 시인">
+  <meta property="og:title" content="강의 — 김고니">
+  <meta property="og:description" content="김고니 시인의 강의. 평창군립도서관 '행복한 책읽기', 시창작, 독서 논술, 동시 쓰기 등 책과 글로 만나는 수업들.">
+  <meta property="og:url" content="https://goni.ink/lectures.html">
+  <meta property="og:image" content="https://goni.ink/og-image.jpg">
+  <meta property="og:locale" content="ko_KR">
+  <meta name="twitter:card" content="summary">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #251040;
+      color: rgba(235, 200, 215, 0.88);
+      font-family: 'Nanum Myeongjo', serif;
+      min-height: 100vh;
+    }
+
+    /* 별 */
+    .stars { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+    .star {
+      position: absolute;
+      border-radius: 50%;
+      background: white;
+      animation: twinkle var(--dur, 10s) ease-in-out infinite var(--delay, 0s);
+    }
+    @keyframes twinkle {
+      0%   { opacity: var(--min-op, 0.05); }
+      30%  { opacity: var(--mid-op, 0.2); }
+      55%  { opacity: var(--min-op, 0.05); }
+      80%  { opacity: var(--max-op, 0.3); }
+      100% { opacity: var(--min-op, 0.05); }
+    }
+
+    /* 헤더 nav */
+    /* ── 서브페이지 헤더 nav ── */
+    header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 24px 48px;
+      background: rgba(37,16,64,1);
+      border-bottom: 1px solid rgba(210, 160, 185, 0.1);
+    }
+
+    .header-home {
+      font-size: 1rem;
+      font-weight: 800;
+      letter-spacing: 0.45em;
+      color: rgba(255, 242, 225, 0.95);
+      text-decoration: none;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.6);
+      transition: color 0.3s;
+      writing-mode: horizontal-tb;
+      white-space: nowrap;
+    }
+    .header-home:hover { color: rgba(255, 240, 225, 1); }
+
+    .header-nav {
+      display: flex;
+      gap: 28px;
+      align-items: center;
+    }
+
+    .header-nav a {
+      color: rgba(210, 180, 200, 0.6);
+      text-decoration: none;
+      font-size: 0.82rem;
+      letter-spacing: 0.2em;
+      font-family: 'Nanum Myeongjo', serif;
+      transition: color 0.3s;
+      writing-mode: horizontal-tb;
+      white-space: nowrap;
+    }
+    .header-nav a:hover,
+    .header-nav a.active {
+      color: rgba(255, 240, 225, 0.97);
+    }
+
+    @media (max-width: 600px) {
+      header { padding: 16px 20px; }
+      .header-nav { gap: 14px; }
+      .header-nav a { font-size: 0.72rem; }
+      .header-home { font-size: 0.85rem; letter-spacing: 0.3em; }
+    }
+
+    /* 본문 */
+    main {
+      position: relative;
+      z-index: 1;
+      padding: 120px 40px 120px;
+      max-width: 840px;
+      margin: 0 auto;
+    }
+
+    /* 섹션 타이틀 */
+    .section-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: 0.4em;
+      color: rgba(225, 185, 205, 0.85);
+      margin-bottom: 48px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid rgba(210, 160, 185, 0.15);
+    }
+
+
+    /* 작가 소개 바이오 */
+    .bio-section {
+      margin-bottom: 80px;
+      padding-bottom: 60px;
+      border-bottom: 1px solid rgba(210, 160, 185, 0.15);
+    }
+
+    .bio-name {
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      font-weight: 800;
+      letter-spacing: 0.45em;
+      color: rgba(255, 242, 225, 0.95);
+      margin-bottom: 28px;
+    }
+
+    .bio-text {
+      font-size: 0.97rem;
+      line-height: 2.2;
+      color: rgba(235, 205, 220, 0.82);
+      letter-spacing: 0.04em;
+      word-break: keep-all;
+    }
+
+    .section + .section { margin-top: 90px; }
+
+    /* 연도별 활동 행 */
+    .activity-list { display: flex; flex-direction: column; gap: 0; }
+
+    .activity-row {
+      display: grid;
+      grid-template-columns: 56px 1fr;
+      gap: 0 28px;
+      padding: 22px 0;
+      border-bottom: 1px solid rgba(210, 160, 185, 0.08);
+    }
+    .activity-row:first-child { border-top: 1px solid rgba(210, 160, 185, 0.08); }
+
+    .activity-year {
+      font-size: 0.78rem;
+      letter-spacing: 0.1em;
+      color: rgba(205, 165, 185, 0.55);
+      padding-top: 3px;
+      flex-shrink: 0;
+    }
+
+    .activity-content {
+      font-size: 0.97rem;
+      line-height: 2.0;
+      color: rgba(235, 205, 220, 0.82);
+      letter-spacing: 0.03em;
+      word-break: keep-all;
+    }
+
+    .compact .activity-row { padding: 12px 0; }
+
+    .article-link {
+      font-size: 0.78rem;
+      color: rgba(210, 180, 200, 0.55);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(210, 160, 185, 0.25);
+      margin-left: 8px;
+      white-space: nowrap;
+      transition: color 0.3s;
+    }
+    .article-link:hover { color: rgba(255, 240, 225, 0.9); }
+
+    .activity-item {
+      display: block;
+      position: relative;
+      padding-left: 16px;
+    }
+    .activity-item::before {
+      content: '·';
+      position: absolute;
+      left: 2px;
+      color: rgba(210, 175, 200, 0.5);
+    }
+
+    .activity-content strong {
+      color: rgba(255, 235, 220, 0.97);
+      font-weight: 700;
+    }
+
+    /* activity-body: content + photo를 하나의 열로 묶음 */
+    .activity-body {
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* 사진 슬롯 */
+    .photo-slots {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 16px;
+      margin-bottom: 8px;
+    }
+    .photo-slot {
+      width: 180px;
+      height: 130px;
+      background: rgba(255,255,255,0.02);
+      border: 1px dashed rgba(210,160,185,0.2);
+      border-radius: 4px;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .photo-slot img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+    }
+
+    /* 정기강의 리스트 */
+    .lecture-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .lecture-row {
+      display: grid;
+      grid-template-columns: 100px 1fr;
+      gap: 0 28px;
+      padding: 18px 0;
+      border-bottom: 1px solid rgba(210, 160, 185, 0.08);
+    }
+    .lecture-row:first-child { border-top: 1px solid rgba(210, 160, 185, 0.08); }
+
+    .lecture-period {
+      font-size: 0.75rem;
+      letter-spacing: 0.05em;
+      color: rgba(205, 165, 185, 0.5);
+      padding-top: 3px;
+    }
+
+    .lecture-content {
+      font-size: 0.95rem;
+      line-height: 1.9;
+      color: rgba(235, 205, 220, 0.82);
+      letter-spacing: 0.03em;
+    }
+
+    /* footer */
+    .footer-line {
+      margin: 90px auto 0;
+      width: 1px;
+      height: 50px;
+      background: linear-gradient(to bottom, rgba(210,160,185,0.25), transparent);
+    }
+
+    @media (max-width: 480px) {
+      main { padding: 100px 24px 80px; }
+      .back-btn { left: 24px; }
+      .activity-row { grid-template-columns: 44px 1fr; gap: 0 16px; }
+      .lecture-row { grid-template-columns: 88px 1fr; gap: 0 16px; }
+    }
+
+    /* ── 안개 레이어 ── */
+    .fog-container {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .fog-layer {
+      position: absolute;
+      width: 200%; height: 200%;
+      top: -50%; left: -50%;
+      background: radial-gradient(ellipse at center,
+        rgba(200, 150, 180, 0.07) 0%, transparent 60%);
+      animation: fogDrift 20s ease-in-out infinite alternate;
+    }
+    .fog-layer:nth-child(2) {
+      background: radial-gradient(ellipse at 30% 70%,
+        rgba(180, 130, 170, 0.06) 0%, transparent 50%);
+      animation: fogDrift2 28s ease-in-out infinite alternate;
+    }
+    .fog-layer:nth-child(3) {
+      background: radial-gradient(ellipse at 70% 30%,
+        rgba(220, 170, 190, 0.05) 0%, transparent 55%);
+      animation: fogDrift3 35s ease-in-out infinite alternate;
+    }
+    @keyframes fogDrift  { 0% { transform: translate(0,0) scale(1); }     100% { transform: translate(3%,4%) scale(1.05); } }
+    @keyframes fogDrift2 { 0% { transform: translate(0,0) rotate(0deg); } 100% { transform: translate(-4%,2%) rotate(3deg); } }
+    @keyframes fogDrift3 { 0% { transform: translate(0,0) scale(1.05); }  100% { transform: translate(5%,-3%) scale(1); } }
+
+    /* ── 안개 파티클 캔버스 ── */
+    #fogCanvas {
+      position: fixed;
+      inset: 0;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    /* ── 하이라이트 카드 ── */
+    .highlight-list { display: flex; flex-direction: column; gap: 64px; margin-bottom: 40px; }
+    .highlight-card { display: flex; flex-direction: column; gap: 24px; }
+    .highlight-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: rgba(255, 235, 220, 0.97);
+      margin-bottom: 14px;
+      word-break: keep-all;
+    }
+    .highlight-desc {
+      font-size: 0.92rem;
+      line-height: 2.0;
+      color: rgba(235, 205, 220, 0.78);
+      letter-spacing: 0.03em;
+      word-break: keep-all;
+    }
+    
+
+    /* ── 사진 빈칸 ── */
+    .photo-placeholder {
+      aspect-ratio: 3 / 2;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px dashed rgba(210, 160, 185, 0.25);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.72rem;
+      letter-spacing: 0.25em;
+      color: rgba(210, 175, 195, 0.35);
+      overflow: hidden;
+    }
+    .photo-placeholder img { width: 100%; height: 100%; object-fit: cover; }
+
+
+
+    /* ── 카드 미니 갤러리 ── */
+    .highlight-gallery { position: relative; }
+    .highlight-strip {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding-bottom: 6px;
+      scroll-snap-type: x proximity;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(210, 160, 185, 0.25) transparent;
+    }
+    .highlight-strip { height: 240px; }
+    .highlight-strip .photo-placeholder {
+      flex: 0 0 auto;
+      height: 100%;
+      scroll-snap-align: start;
+    }
+    .highlight-strip .photo-placeholder.filled {
+      aspect-ratio: auto;
+      border: none;
+    }
+    .highlight-strip img { width: auto; height: 100%; display: block; }
+    .highlight-gallery .gallery-arrow {
+      width: 30px; height: 30px;
+      font-size: 0.85rem;
+    }
+    .highlight-gallery .gallery-arrow.prev { left: -10px; }
+    .highlight-gallery .gallery-arrow.next { right: -10px; }
+
+    /* ── 한 줄 갤러리 ── */
+    .gallery-wrap { position: relative; }
+    .gallery-strip {
+      display: flex;
+      gap: 14px;
+      overflow-x: auto;
+      padding-bottom: 12px;
+      -webkit-overflow-scrolling: touch;
+      scroll-snap-type: x proximity;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(210, 160, 185, 0.25) transparent;
+    }
+    .gallery-strip { height: 220px; }
+    .gallery-item {
+      position: relative;
+      flex: 0 0 auto;
+      width: auto;
+      height: 100%;
+      border-radius: 4px;
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px dashed rgba(210, 160, 185, 0.25);
+      scroll-snap-align: start;
+    }
+    .gallery-item { aspect-ratio: 3 / 2; }
+    .gallery-item.filled { aspect-ratio: auto; border: none; }
+    .gallery-item img { width: auto; height: 100%; display: block; }
+    .gallery-caption {
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+      padding: 26px 12px 10px;
+      background: linear-gradient(to top, rgba(20, 8, 38, 0.85), transparent);
+      font-size: 0.75rem;
+      letter-spacing: 0.06em;
+      color: rgba(255, 242, 225, 0.92);
+      word-break: keep-all;
+    }
+    .gallery-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-60%);
+      z-index: 5;
+      width: 38px; height: 38px;
+      border-radius: 50%;
+      border: 1px solid rgba(210, 160, 185, 0.35);
+      background: rgba(37, 16, 64, 0.75);
+      color: rgba(255, 242, 225, 0.85);
+      font-size: 1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.3s, color 0.3s;
+    }
+    .gallery-arrow:hover { background: rgba(60, 30, 95, 0.9); color: rgba(255, 242, 225, 1); }
+    .gallery-arrow.prev { left: -14px; }
+    .gallery-arrow.next { right: -14px; }
+    @media (hover: none), (max-width: 640px) {
+      .gallery-arrow { display: none; }
+      .gallery-strip { height: 180px; }
+      .highlight-strip { height: 200px; }
+    }
+
+    /* ── 갤러리 ── */
+    .gallery-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+
+    @media (max-width: 640px) {
+      .highlight-card { gap: 24px; }
+      .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+
+  <!-- 안개 레이어 -->
+  <div class="fog-container">
+    <div class="fog-layer"></div>
+    <div class="fog-layer"></div>
+    <div class="fog-layer"></div>
+  </div>
+  <!-- 안개 파티클 캔버스 -->
+  <canvas id="fogCanvas"></canvas>
+  <div class="stars" id="stars"></div>
+
+  <header>
+    <a class="header-home" href="index.html">김고니</a>
+    <nav class="header-nav">
+      <a href="index.html">메인</a>
+      <a href="about.html">작가</a>
+      <a href="books.html">시집</a>
+      <a href="lectures.html" class="active">강의</a>
+      <a href="culture.html">행사</a>
+      <a href="news.html">소식</a>
+      <a href="contact.html">연락</a>
+    </nav>
+  </header>
+
+  <main>
+
+    <div class="bio-section">
+      <div class="bio-name">강 의</div>
+      <p class="bio-text">
+        평창에서 시와 독서, 글쓰기, 인문 등 다양한 분야의 강의를 하고 있습니다.
+        함께 읽고 쓰며 서로의 생각을 이야기하는 시간을 만들어갑니다.
+      </p>
+    </div>
+
+    <section class="section">
+      <div class="section-title">대 표 강 의</div>
+      <div class="highlight-list">
+        <div class="highlight-card">
+          <div class="highlight-gallery">
+            <button class="gallery-arrow prev" aria-label="이전 사진">&#8249;</button>
+            <button class="gallery-arrow next" aria-label="다음 사진">&#8250;</button>
+            <div class="highlight-strip"><div class="photo-placeholder filled"><img src="photos/lectures/chaekilki/01.jpg" alt="행복한 책읽기"></div><div class="photo-placeholder filled"><img src="photos/lectures/chaekilki/02.jpg" alt="행복한 책읽기"></div><div class="photo-placeholder filled"><img src="photos/lectures/chaekilki/03.jpg" alt="행복한 책읽기"></div><div class="photo-placeholder filled"><img src="photos/lectures/chaekilki/04.jpg" alt="행복한 책읽기"></div><div class="photo-placeholder filled"><img src="photos/lectures/chaekilki/05.jpg" alt="행복한 책읽기"></div><div class="photo-placeholder filled"><img src="photos/lectures/chaekilki/06.jpg" alt="행복한 책읽기"></div><div class="photo-placeholder filled"><img src="photos/lectures/chaekilki/07.jpg" alt="행복한 책읽기"></div><div class="photo-placeholder filled"><img src="photos/lectures/chaekilki/08.jpg" alt="행복한 책읽기"></div><div class="photo-placeholder filled"><img src="photos/lectures/chaekilki/09.jpg" alt="행복한 책읽기"></div><div class="photo-placeholder filled"><img src="photos/lectures/chaekilki/10.jpg" alt="행복한 책읽기"></div><div class="photo-placeholder filled"><img src="photos/lectures/chaekilki/11.jpg" alt="행복한 책읽기"></div><div class="photo-placeholder filled"><img src="photos/lectures/chaekilki/12.jpg" alt="행복한 책읽기"></div><div class="photo-placeholder filled"><img src="photos/lectures/chaekilki/13.jpg" alt="행복한 책읽기"></div><div class="photo-placeholder filled"><img src="photos/lectures/chaekilki/14.jpg" alt="행복한 책읽기"></div><div class="photo-placeholder filled"><img src="photos/lectures/chaekilki/15.jpg" alt="행복한 책읽기"></div><div class="photo-placeholder filled"><img src="photos/lectures/chaekilki/16.jpg" alt="행복한 책읽기"></div></div>
+          </div>
+          <div>
+            <div class="highlight-title">행복한 책읽기</div>
+            <div class="highlight-desc">2018년부터 평창군립도서관에서 시작된 대표 강좌. &lt;행복한 글쓰기&gt;, &lt;행복한 동화읽기&gt;, &lt;행복한 시읽기&gt;로 이어졌으며 수강생들과 문집 발간, 출판 기념 북콘서트까지 함께합니다.</div>
+          </div>
+        </div>
+                <div class="highlight-card">
+          <div class="highlight-gallery">
+            <button class="gallery-arrow prev" aria-label="이전 사진">&#8249;</button>
+            <button class="gallery-arrow next" aria-label="다음 사진">&#8250;</button>
+            <div class="highlight-strip"><div class="photo-placeholder filled"><img src="photos/lectures/sinangsong/01.jpg" alt="시창작·시낭송"></div><div class="photo-placeholder filled"><img src="photos/lectures/sinangsong/02.jpg" alt="시창작·시낭송"></div><div class="photo-placeholder filled"><img src="photos/lectures/sinangsong/03.jpg" alt="시창작·시낭송"></div><div class="photo-placeholder filled"><img src="photos/lectures/sinangsong/04.jpg" alt="시창작·시낭송"></div><div class="photo-placeholder filled"><img src="photos/lectures/sinangsong/05.jpg" alt="시창작·시낭송"></div><div class="photo-placeholder filled"><img src="photos/lectures/sinangsong/06.jpg" alt="시창작·시낭송"></div></div>
+          </div>
+          <div>
+            <div class="highlight-title">시창작 · 시낭송</div>
+            <div class="highlight-desc">2020년부터 평창문화원에서 시창작 수업을 진행하고 있습니다. 좋은 시를 함께 읽고 삶의 이야기를 시로 쓰며, 창작시를 시화로 완성해 전시회를 함께 엽니다.</div>
+          </div>
+        </div>
+        <div class="highlight-card">
+          <div class="highlight-gallery">
+            <button class="gallery-arrow prev" aria-label="이전 사진">&#8249;</button>
+            <button class="gallery-arrow next" aria-label="다음 사진">&#8250;</button>
+            <div class="highlight-strip"><div class="photo-placeholder filled"><img src="photos/lectures/dongsi/04.jpg" alt="행복한 동시 쓰기 수업"></div><div class="photo-placeholder filled"><img src="photos/lectures/dongsi/01.jpg" alt="행복한 동시 쓰기 수업"></div><div class="photo-placeholder filled"><img src="photos/lectures/dongsi/02.jpg" alt="행복한 동시 쓰기 수업"></div><div class="photo-placeholder filled"><img src="photos/lectures/dongsi/03.jpg" alt="행복한 동시 쓰기 수업"></div><div class="photo-placeholder filled"><img src="photos/lectures/dongsi/05.jpg" alt="행복한 동시 쓰기 수업"></div></div>
+          </div>
+          <div>
+            <div class="highlight-title">행복한 동시 쓰기</div>
+            <div class="highlight-desc">2022년부터 방과후 아카데미, 다함께돌봄센터에서 아이들과 책을 읽고 글을 씁니다. 세상을 자유롭게 바라보고 표현하는 법을 배웁니다.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-title">강 의</div>
+      <div class="lecture-list">
+        <div class="lecture-row" style="grid-template-columns: 1fr;">
+          <div class="lecture-content"><strong>&lt;행복한 책읽기&gt; &lt;행복한 글쓰기&gt; &lt;행복한 동화읽기&gt; &lt;행복한 시읽기&gt;</strong><br>인문학, 책읽기와 글쓰기, 문집 발간</div>
+        </div>
+        <div class="lecture-row" style="grid-template-columns: 1fr;">
+          <div class="lecture-content"><strong>&lt;행복한 영화읽기&gt;</strong><br>독서토론 및 영화감상</div>
+        </div>
+        <div class="lecture-row" style="grid-template-columns: 1fr;">
+          <div class="lecture-content"><strong>&lt;시창작&gt;</strong><br>시 읽기, 시 쓰기, 시화 그리기, 전시</div>
+        </div>
+        <div class="lecture-row" style="grid-template-columns: 1fr;">
+          <div class="lecture-content"><strong>&lt;행복한 동시 쓰기&gt;</strong><br>사고력 키우기, 동시 쓰기</div>
+        </div>
+        <div class="lecture-row" style="grid-template-columns: 1fr;">
+          <div class="lecture-content"><strong>&lt;자존감 수업&gt;</strong><br>토론, 창의력 표현</div>
+        </div>
+        <div class="lecture-row" style="grid-template-columns: 1fr;">
+          <div class="lecture-content"><strong>&lt;진로 · 학부모 수업&gt;</strong><br>진로 탐색, 자녀와의 관계</div>
+        </div>
+        <div class="lecture-row" style="grid-template-columns: 1fr;">
+          <div class="lecture-content"><strong>&lt;스토리텔링&gt;</strong><br>나만의 이야기 만들기</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-title">자 격 증</div>
+      <div class="activity-list compact">
+        <div class="activity-row" style="grid-template-columns: 1fr;">
+          <div class="activity-content">시낭송 지도사 · 독서논술 지도사 · 동화구연 지도사 · 아동한자 지도사 · 한국어문회 한자 1급</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-title">현 장 의 기 록</div>
+      <div class="gallery-wrap">
+        <button class="gallery-arrow prev" aria-label="이전 사진">&#8249;</button>
+        <button class="gallery-arrow next" aria-label="다음 사진">&#8250;</button>
+        <div class="gallery-strip">
+        <div class="gallery-item filled">
+          <img src="photos/gallery/lectures/01.jpg" alt="시낭송반">
+          <div class="gallery-caption">시낭송반 · 2022</div>
+        </div>
+        <div class="gallery-item filled">
+          <img src="photos/gallery/lectures/02.jpg" alt="들어봤니 SDGs">
+          <div class="gallery-caption">들어봤니 SDGs · 2023</div>
+        </div>
+        <div class="gallery-item filled">
+          <img src="photos/gallery/lectures/03.jpg" alt="들어봤니 SDGs · 경로당">
+          <div class="gallery-caption">들어봤니 SDGs · 경로당 · 2025</div>
+        </div>
+        <div class="gallery-item filled">
+          <img src="photos/gallery/lectures/04.jpg" alt="들어봤니 SDGs">
+          <div class="gallery-caption">들어봤니 SDGs · 2026</div>
+        </div>
+        <div class="gallery-item filled">
+          <img src="photos/gallery/lectures/05.jpg" alt="들어봤니 SDGs 인형극">
+          <div class="gallery-caption">들어봤니 SDGs 인형극 · 2026</div>
+        </div>
+        <div class="gallery-item filled">
+          <img src="photos/gallery/lectures/06.jpg" alt="대관령 온 마을학교">
+          <div class="gallery-caption">대관령 온 마을학교 · 2022</div>
+        </div>
+        <div class="gallery-item filled">
+          <img src="photos/gallery/lectures/07.jpg" alt="경로당 시낭송">
+          <div class="gallery-caption">경로당 시낭송</div>
+        </div>
+        <div class="gallery-item filled">
+          <img src="photos/gallery/lectures/08.jpg" alt="경로당 시낭송">
+          <div class="gallery-caption">경로당 시낭송</div>
+        </div>
+        <div class="gallery-item filled">
+          <img src="photos/gallery/lectures/09.jpg" alt="대관령 유아 수업">
+          <div class="gallery-caption">대관령 유아 수업 · 2021</div>
+        </div>
+        <div class="gallery-item filled">
+          <img src="photos/gallery/lectures/10.jpg" alt="대관령 평생학습">
+          <div class="gallery-caption">대관령 평생학습 · 2022</div>
+        </div>
+        <div class="gallery-item filled">
+          <img src="photos/gallery/lectures/11.jpg" alt="대화초등학교 수업">
+          <div class="gallery-caption">대화초등학교 수업 · 2025</div>
+        </div>
+        <div class="gallery-item filled">
+          <img src="photos/gallery/lectures/12.jpg" alt="대화 평생학습">
+          <div class="gallery-caption">대화 평생학습 · 2021</div>
+        </div>
+        <div class="gallery-item filled">
+          <img src="photos/gallery/lectures/13.jpg" alt="도서관 유아 수업">
+          <div class="gallery-caption">도서관 유아 수업</div>
+        </div>
+        <div class="gallery-item filled">
+          <img src="photos/gallery/lectures/14.jpg" alt="도서관 유아 수업">
+          <div class="gallery-caption">도서관 유아 수업</div>
+        </div>
+        <div class="gallery-item filled">
+          <img src="photos/gallery/lectures/15.jpg" alt="도성초등학교 글쓰기 특강">
+          <div class="gallery-caption">도성초등학교 글쓰기 특강 · 2019</div>
+        </div>
+        <div class="gallery-item filled">
+          <img src="photos/gallery/lectures/16.jpg" alt="다함께돌봄센터 수업">
+          <div class="gallery-caption">다함께돌봄센터 수업</div>
+        </div>
+        <div class="gallery-item filled">
+          <img src="photos/gallery/lectures/17.jpg" alt="동화구연 수업">
+          <div class="gallery-caption">동화구연 수업 · 2020</div>
+        </div>
+        <div class="gallery-item filled">
+          <img src="photos/gallery/lectures/18.jpg" alt="동화구연 수업">
+          <div class="gallery-caption">동화구연 수업 · 2020</div>
+        </div>
+        <div class="gallery-item filled">
+          <img src="photos/gallery/lectures/19.jpg" alt="방과후아카데미 독서 논술">
+          <div class="gallery-caption">방과후아카데미 독서 논술 · 2022</div>
+        </div>
+        <div class="gallery-item filled">
+          <img src="photos/gallery/lectures/20.jpg" alt="책방 선인장 동시 수업">
+          <div class="gallery-caption">책방 선인장 동시 수업 · 2024</div>
+        </div>
+        <div class="gallery-item filled">
+          <img src="photos/gallery/lectures/21.jpg" alt="책방 선인장 동시 수업">
+          <div class="gallery-caption">책방 선인장 동시 수업 · 2025</div>
+        </div>
+        <div class="gallery-item filled">
+          <img src="photos/gallery/lectures/22.jpg" alt="시낭송 강의">
+          <div class="gallery-caption">시낭송 강의 · 2022</div>
+        </div>
+        <div class="gallery-item filled">
+          <img src="photos/gallery/lectures/23.jpg" alt="시낭송 강의">
+          <div class="gallery-caption">시낭송 강의 · 2024</div>
+        </div>
+        <div class="gallery-item filled">
+          <img src="photos/gallery/lectures/24.jpg" alt="시낭송 강의">
+          <div class="gallery-caption">시낭송 강의 · 2024</div>
+        </div>
+        <div class="gallery-item filled">
+          <img src="photos/gallery/lectures/25.jpg" alt="시낭송반">
+          <div class="gallery-caption">시낭송반 · 2023</div>
+        </div>
+        <div class="gallery-item filled">
+          <img src="photos/gallery/lectures/26.jpg" alt="시낭송반">
+          <div class="gallery-caption">시낭송반 · 2022</div>
+        </div>
+        <div class="gallery-item filled">
+          <img src="photos/gallery/lectures/27.jpg" alt="에세이 강의">
+          <div class="gallery-caption">에세이 강의 · 2024</div>
+        </div>
+        <div class="gallery-item filled">
+          <img src="photos/gallery/lectures/28.jpg" alt="평창 시네마 인문학 강의">
+          <div class="gallery-caption">평창 시네마 인문학 강의</div>
+        </div>
+        <div class="gallery-item filled">
+          <img src="photos/gallery/lectures/29.jpg" alt="평창 시네마 인문학 강의">
+          <div class="gallery-caption">평창 시네마 인문학 강의</div>
+        </div>
+        <div class="gallery-item filled">
+          <img src="photos/gallery/lectures/30.jpg" alt="행복한 영화읽기">
+          <div class="gallery-caption">행복한 영화읽기 · 2021</div>
+        </div>
+        <div class="gallery-item filled">
+          <img src="photos/gallery/lectures/31.jpg" alt="행복한 영화읽기">
+          <div class="gallery-caption">행복한 영화읽기</div>
+        </div>
+        <div class="gallery-item filled">
+          <img src="photos/gallery/lectures/32.jpg" alt="대관령 온 마을학교">
+          <div class="gallery-caption">대관령 온 마을학교 · 2022</div>
+        </div>
+        <div class="gallery-item filled">
+          <img src="photos/gallery/lectures/33.jpg" alt="대관령 온 마을학교">
+          <div class="gallery-caption">대관령 온 마을학교 · 2022</div>
+        </div>
+        <div class="gallery-item filled">
+          <img src="photos/gallery/lectures/34.jpg" alt="평창 올림픽 유산 교육">
+          <div class="gallery-caption">평창 올림픽 유산 교육 · 2026</div>
+        </div>
+        <div class="gallery-item filled">
+          <img src="photos/gallery/lectures/35.jpg" alt="진로 특강 · 원주">
+          <div class="gallery-caption">진로 특강 · 원주 · 2025</div>
+        </div>
+        <div class="gallery-item filled">
+          <img src="photos/gallery/lectures/36.jpg" alt="장평초등학교 수업">
+          <div class="gallery-caption">장평초등학교 수업 · 2025</div>
+        </div>
+        <div class="gallery-item filled">
+          <img src="photos/gallery/lectures/37.jpg" alt="평창교육도서관 강의">
+          <div class="gallery-caption">평창교육도서관 강의 · 2026</div>
+        </div>
+        <div class="gallery-item filled">
+          <img src="photos/gallery/lectures/38.jpg" alt="행복한 책읽기">
+          <div class="gallery-caption">행복한 책읽기</div>
+        </div>
+        <div class="gallery-item filled">
+          <img src="photos/gallery/lectures/39.jpg" alt="들어봤니 SDGs · 호명초">
+          <div class="gallery-caption">들어봤니 SDGs · 호명초 · 2025</div>
+        </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="footer-line"></div>
+
+  </main>
+
+  <script>
+    const starsEl = document.getElementById('stars');
+    for (let i = 0; i < 80; i++) {
+      const s = document.createElement('div');
+      s.className = 'star';
+      const size = Math.random() * 1.8 + 0.4;
+      const minOp = 0.02 + Math.random() * 0.06;
+      const maxOp = minOp + 0.15 + Math.random() * 0.3;
+      s.style.cssText = `
+        width:${size}px; height:${size}px;
+        top:${Math.random()*100}%; left:${Math.random()*100}%;
+        --dur:${9 + Math.random()*16}s;
+        --delay:${-Math.random()*20}s;
+        --min-op:${minOp.toFixed(3)};
+        --mid-op:${(minOp + (maxOp-minOp)*0.5).toFixed(3)};
+        --max-op:${maxOp.toFixed(3)};
+      `;
+      starsEl.appendChild(s);
+    }
+
+    // ── 안개 파티클 캔버스 ──
+    const fogCanvas = document.getElementById('fogCanvas');
+    const fogCtx = fogCanvas.getContext('2d');
+    function resizeFog() { fogCanvas.width = window.innerWidth; fogCanvas.height = window.innerHeight; }
+    resizeFog();
+    window.addEventListener('resize', resizeFog);
+
+    const NUM_FOG = 50;
+    const fogParticles = Array.from({ length: NUM_FOG }, () => ({
+      x: Math.random() * window.innerWidth,
+      y: Math.random() * window.innerHeight,
+      r: 80 + Math.random() * 180,
+      vx: (Math.random() - 0.5) * 0.18,
+      vy: (Math.random() - 0.5) * 0.12,
+      a: 0.01 + Math.random() * 0.03,
+      phase: Math.random() * Math.PI * 2,
+    }));
+
+    function drawFog(t) {
+      fogCtx.clearRect(0, 0, fogCanvas.width, fogCanvas.height);
+      for (const p of fogParticles) {
+        const pulse = Math.sin(t * 0.0006 + p.phase) * 0.012;
+        const grad = fogCtx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r);
+        grad.addColorStop(0,   `rgba(200,155,175,${p.a + pulse})`);
+        grad.addColorStop(0.5, `rgba(175,135,160,${(p.a + pulse) * 0.4})`);
+        grad.addColorStop(1,   'rgba(0,0,0,0)');
+        fogCtx.fillStyle = grad;
+        fogCtx.beginPath();
+        fogCtx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        fogCtx.fill();
+        p.x += p.vx; p.y += p.vy;
+        if (p.x < -p.r) p.x = fogCanvas.width + p.r;
+        if (p.x > fogCanvas.width + p.r) p.x = -p.r;
+        if (p.y < -p.r) p.y = fogCanvas.height + p.r;
+        if (p.y > fogCanvas.height + p.r) p.y = -p.r;
+      }
+    }
+
+    // ── 별똥별 ──
+    const shootingCanvas = document.createElement('canvas');
+    shootingCanvas.style.cssText = 'position:fixed;inset:0;z-index:1;pointer-events:none;';
+    document.body.appendChild(shootingCanvas);
+    const sc = shootingCanvas.getContext('2d');
+    function resizeShooting() { shootingCanvas.width = window.innerWidth; shootingCanvas.height = window.innerHeight; }
+    resizeShooting();
+    window.addEventListener('resize', resizeShooting);
+
+    const shootingStars = [];
+    function spawnShootingStar() {
+      const w = window.innerWidth, h = window.innerHeight;
+      const angle = (30 + Math.random() * 25) * Math.PI / 180;
+      shootingStars.push({
+        x: Math.random() * w * 0.9,
+        y: Math.random() * h * 0.35,
+        vx: Math.cos(angle) * (3.5 + Math.random() * 2),
+        vy: Math.sin(angle) * (3.5 + Math.random() * 2),
+        length: 90 + Math.random() * 120,
+        life: 0,
+        maxLife: 55 + Math.random() * 30,
+      });
+    }
+    spawnShootingStar();
+    setInterval(spawnShootingStar, 5000);
+
+    function drawShootingStars() {
+      sc.clearRect(0, 0, shootingCanvas.width, shootingCanvas.height);
+      for (let i = shootingStars.length - 1; i >= 0; i--) {
+        const s = shootingStars[i];
+        s.life++; s.x += s.vx; s.y += s.vy;
+        const progress = s.life / s.maxLife;
+        const alpha = progress < 0.2 ? progress / 0.2 : progress > 0.7 ? (1 - progress) / 0.3 : 1;
+        const len = s.length / Math.hypot(s.vx, s.vy);
+        const tailX = s.x - s.vx * len, tailY = s.y - s.vy * len;
+        const grad = sc.createLinearGradient(tailX, tailY, s.x, s.y);
+        grad.addColorStop(0,   'rgba(255,210,190,0)');
+        grad.addColorStop(0.6, `rgba(240,200,180,${(alpha*0.35).toFixed(3)})`);
+        grad.addColorStop(1,   `rgba(255,235,215,${(alpha*0.75).toFixed(3)})`);
+        sc.beginPath(); sc.moveTo(tailX, tailY); sc.lineTo(s.x, s.y);
+        sc.strokeStyle = grad; sc.lineWidth = 0.8 + Math.random() * 0.4; sc.stroke();
+        sc.beginPath(); sc.arc(s.x, s.y, 1.2, 0, Math.PI*2);
+        sc.fillStyle = `rgba(255,235,215,${(alpha*0.6).toFixed(3)})`; sc.fill();
+        if (s.life >= s.maxLife) shootingStars.splice(i, 1);
+      }
+    }
+
+    // ── 애니메이션 루프 ──
+    function bgAnimate(t) {
+      requestAnimationFrame(bgAnimate);
+      drawFog(t);
+      drawShootingStars();
+    }
+    requestAnimationFrame(bgAnimate);
+
+    document.querySelectorAll('.gallery-wrap').forEach(wrap => {
+      const strip = wrap.querySelector('.gallery-strip');
+      wrap.querySelectorAll('.gallery-arrow').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const item = strip.querySelector('.gallery-item');
+          const step = item ? item.offsetWidth + 14 : 254;
+          strip.scrollBy({ left: btn.classList.contains('next') ? step : -step, behavior: 'smooth' });
+        });
+      });
+    });
+
+    document.querySelectorAll('.highlight-gallery').forEach(wrap => {
+      const strip = wrap.querySelector('.highlight-strip');
+      wrap.querySelectorAll('.gallery-arrow').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const item = strip.querySelector('.photo-placeholder');
+          const step = item ? item.offsetWidth + 10 : 300;
+          strip.scrollBy({ left: btn.classList.contains('next') ? step : -step, behavior: 'smooth' });
+        });
+      });
+    });
+  </script>
+
+</body>
+</html>
