@@ -1,3 +1,6 @@
 {
-    "outputDirectory": "."
+        "outputDirectory": ".",
+        "redirects": [
+                    { "source": "/culture.html", "destination": "/events.html", "permanent": true }
+        ]
 }
