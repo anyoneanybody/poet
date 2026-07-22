@@ -288,6 +288,16 @@
       z-index: 2;
       pointer-events: none;
     }
+
+    .visually-hidden {
+      position: absolute !important;
+      width: 1px; height: 1px;
+      padding: 0; margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
   </style>
 </head>
 <body>
@@ -318,6 +328,19 @@
 
   <main>
     <h1 style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;">시집 — 김고니</h1>
+
+    <!-- 검색엔진/AI를 위한 목록 (자바스크립트로 그려지는 표지 대신 텍스트로 제공) -->
+    <ul class="visually-hidden">
+      <li>2025 『그녀는 빨간 신호등을 보고 있다』 (시집)</li>
+      <li>2023 『아픈 손으로 문을 여는 사람들에게』 (시집)</li>
+      <li>2021 『아무도 손대지 않은 아침을 너에게 줄게』 (시집)</li>
+      <li>2019 『팔랑,』 (시집)</li>
+      <li>2017 『냉장고를 먹는 기린』 (시집)</li>
+      <li>2016 『달의 발자국』 (시집)</li>
+      <li>2025 『고슴도치의 고백』 (동시집)</li>
+      <li>2022 『꽃잎 먹는 달팽이』 (동시집)</li>
+      <li>2020 『완이의 잠꼬대』 (동시집)</li>
+    </ul>
 
     <!-- 시집 섹션 -->
     <section class="section">

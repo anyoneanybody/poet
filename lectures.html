@@ -16,6 +16,7 @@
   <meta property="og:image" content="https://goni.ink/og-image.jpg">
   <meta property="og:locale" content="ko_KR">
   <meta name="twitter:card" content="summary">
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "ItemList", "name": "김고니 시인의 강의", "itemListElement": [{"@type": "ListItem", "position": 1, "item": {"@type": "Course", "name": "행복한 책읽기 · 행복한 글쓰기 · 행복한 동화읽기 · 행복한 시읽기", "description": "인문학, 책읽기와 글쓰기, 문집 발간", "provider": {"@type": "Person", "name": "김고니"}}}, {"@type": "ListItem", "position": 2, "item": {"@type": "Course", "name": "행복한 영화읽기", "description": "독서토론 및 영화감상", "provider": {"@type": "Person", "name": "김고니"}}}, {"@type": "ListItem", "position": 3, "item": {"@type": "Course", "name": "시창작", "description": "시 읽기, 시 쓰기, 시화 그리기, 전시", "provider": {"@type": "Person", "name": "김고니"}}}, {"@type": "ListItem", "position": 4, "item": {"@type": "Course", "name": "행복한 동시 쓰기", "description": "사고력 키우기, 동시 쓰기", "provider": {"@type": "Person", "name": "김고니"}}}, {"@type": "ListItem", "position": 5, "item": {"@type": "Course", "name": "자존감 수업", "description": "토론, 창의력 표현", "provider": {"@type": "Person", "name": "김고니"}}}, {"@type": "ListItem", "position": 6, "item": {"@type": "Course", "name": "진로 · 학부모 수업", "description": "진로 탐색, 자녀와의 관계", "provider": {"@type": "Person", "name": "김고니"}}}, {"@type": "ListItem", "position": 7, "item": {"@type": "Course", "name": "스토리텔링", "description": "나만의 이야기 만들기", "provider": {"@type": "Person", "name": "김고니"}}}]}</script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&display=swap');
 
@@ -382,7 +383,7 @@
     .highlight-gallery .gallery-arrow.next { right: -10px; }
 
     /* ── 한 줄 갤러리 ── */
-    .gallery-wrap { position: relative; }
+    .gallery-wrap { position: relative; width: 100%; }
     .gallery-strip {
       display: flex;
       gap: 14px;
@@ -393,7 +394,7 @@
       scrollbar-width: thin;
       scrollbar-color: rgba(210, 160, 185, 0.25) transparent;
     }
-    .gallery-strip { height: 220px; width: calc(100% - 56px); }
+    .gallery-strip { height: 220px; width: 100%; }
     .gallery-item {
       position: relative;
       flex: 0 0 auto;
@@ -442,6 +443,9 @@
       .gallery-arrow { display: none; }
       .gallery-strip { height: 180px; }
       .highlight-strip { height: 200px; }
+    }
+    @media (min-width: 641px) {
+      .gallery-wrap { width: min(620px, 100% - 40px); }
     }
 
     /* ── 갤러리 ── */
