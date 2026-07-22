@@ -2,3 +2,5 @@ User-agent: *
 Allow: /
 
 Sitemap: https://goni.ink/sitemap.xml
+
+#DaumWebMasterTool:c6367ba9f53375d15be686cbd3b433500b47152a5e0e142567dfca507ec27165:ihILes5sKkj29oFQ0x6grw==
