@@ -1,0 +1,14 @@
+# macOS 시스템 파일
+.DS_Store
+._*
+.Spotlight-V100
+.Trashes
+
+# 편집기 임시 파일
+*.swp
+*~
+
+# 사진 원본 (HEIC 등 웹에 안 쓰는 파일)
+**/_원본/
+*.HEIC
+*.heic
